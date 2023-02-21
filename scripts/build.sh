@@ -9,6 +9,6 @@ do
   for arch in $(echo $INPUT_GOARCH | tr ',' '\n')
   do
     echo "Building for ${os}/${arch}"
-    GOOS=$os GOARCH=$arch go build ./cmd/golicense -o dist/golicense-$os-$arch
+    GOOS=$os GOARCH=$arch go build -o dist/golicense-$os-$arch ./cmd/golicense
   done
 done

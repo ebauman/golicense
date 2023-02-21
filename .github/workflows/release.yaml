@@ -17,7 +17,7 @@ jobs:
 
       - name: Install deps
         run: |
-          go get .
+          go get ./...
 
       - name: Run tests
         run: go test ./...
