@@ -99,3 +99,25 @@ func (InvalidPublicKeysError) Error() string {
 func NewInvalidPublicKeysError() InvalidPublicKeysError {
 	return InvalidPublicKeysError{}
 }
+
+type LicenseExpiredError struct {
+}
+
+func (LicenseExpiredError) Error() string {
+	return fmt.Sprintf("license expired")
+}
+
+func NewLicenseExpiredError() LicenseExpiredError {
+	return LicenseExpiredError{}
+}
+
+type LicenseNotYetValidError struct {
+}
+
+func (LicenseNotYetValidError) Error() string {
+	return fmt.Sprintf("license not yet valid")
+}
+
+func NewLicenseNotYetValidError() LicenseNotYetValidError {
+	return LicenseNotYetValidError{}
+}
