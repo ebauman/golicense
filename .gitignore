@@ -1,3 +1,4 @@
 ./golicense
 *.pem
 .idea/
+golicense
