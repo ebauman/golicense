@@ -5,6 +5,7 @@ import (
 	"fmt"
 	license2 "github.com/ebauman/golicense/pkg/license"
 	"github.com/ebauman/golicense/pkg/types"
+	"time"
 )
 
 func Blocking(licenseKey string, usages map[string]int, publicKeys []*rsa.PublicKey) types.LicensingResponse {
@@ -23,6 +24,16 @@ func Blocking(licenseKey string, usages map[string]int, publicKeys []*rsa.Public
 	license, err := license2.ParseLicenseKey([]byte(licenseKey), publicKeys)
 	if err != nil {
 		return types.NewLicensingResponse(false, err)
+	}
+
+	// it's a license. is it expired?
+	if license.NotAfter.Before(time.Now()) {
+		return types.NewLicensingResponse(false, types.NewLicenseExpiredError())
+	}
+
+	// are we using it before we should?
+	if license.NotBefore.After(time.Now()) {
+		return types.NewLicensingResponse(false, types.NewLicenseNotYetValidError())
 	}
 
 	// valid license, check usages
