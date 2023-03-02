@@ -52,6 +52,7 @@ func NewLicensingResponse(success bool, err error) LicensingResponse {
 type Object interface {
 	GetId() string
 	GetKind() string
+	DeepCopyObject() Object
 }
 
 type MetaObject interface {

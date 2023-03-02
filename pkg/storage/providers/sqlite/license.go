@@ -68,7 +68,8 @@ func (p *Provider) GetLicense(id string) (*types.License, error) {
 	return license, nil
 }
 
-func (p *Provider) CreateLicense(license *types.License) (*types.License, error) {
+func (p *Provider) CreateLicense(inputLicense *types.License) (*types.License, error) {
+	license := inputLicense.DeepCopyObject().(*types.License)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err
@@ -100,7 +101,8 @@ func (p *Provider) CreateLicense(license *types.License) (*types.License, error)
 	return license, nil
 }
 
-func (p *Provider) UpdateLicense(license *types.License) (*types.License, error) {
+func (p *Provider) UpdateLicense(inputLicense *types.License) (*types.License, error) {
+	license := inputLicense.DeepCopyObject().(*types.License)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err

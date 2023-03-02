@@ -50,7 +50,8 @@ func (p *Provider) GetProduct(id string) (*types.Product, error) {
 	return product, nil
 }
 
-func (p *Provider) CreateProduct(product *types.Product) (*types.Product, error) {
+func (p *Provider) CreateProduct(inputProduct *types.Product) (*types.Product, error) {
+	product := inputProduct.DeepCopyObject().(*types.Product)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err
@@ -76,7 +77,8 @@ func (p *Provider) CreateProduct(product *types.Product) (*types.Product, error)
 	return product, nil
 }
 
-func (p *Provider) UpdateProduct(product *types.Product) (*types.Product, error) {
+func (p *Provider) UpdateProduct(inputProduct *types.Product) (*types.Product, error) {
+	product := inputProduct.DeepCopyObject().(*types.Product)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err

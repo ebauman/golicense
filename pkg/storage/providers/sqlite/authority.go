@@ -58,7 +58,8 @@ func (p *Provider) GetAuthority(id string) (*types.Authority, error) {
 	return authority, nil
 }
 
-func (p *Provider) CreateAuthority(authority *types.Authority) (*types.Authority, error) {
+func (p *Provider) CreateAuthority(inputAuthority *types.Authority) (*types.Authority, error) {
+	authority := inputAuthority.DeepCopyObject().(*types.Authority)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err
@@ -89,7 +90,8 @@ func (p *Provider) CreateAuthority(authority *types.Authority) (*types.Authority
 	return authority, nil
 }
 
-func (p *Provider) UpdateAuthority(authority *types.Authority) (*types.Authority, error) {
+func (p *Provider) UpdateAuthority(inputAuthority *types.Authority) (*types.Authority, error) {
+	authority := inputAuthority.DeepCopyObject().(*types.Authority)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err

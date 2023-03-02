@@ -52,7 +52,8 @@ func (p *Provider) GetLicensee(id string) (*types.Licensee, error) {
 	return licensee, nil
 }
 
-func (p *Provider) CreateLicensee(licensee *types.Licensee) (*types.Licensee, error) {
+func (p *Provider) CreateLicensee(inputLicensee *types.Licensee) (*types.Licensee, error) {
+	licensee := inputLicensee.DeepCopyObject().(*types.Licensee)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err
@@ -80,7 +81,8 @@ func (p *Provider) CreateLicensee(licensee *types.Licensee) (*types.Licensee, er
 	return licensee, nil
 }
 
-func (p *Provider) UpdateLicensee(licensee *types.Licensee) (*types.Licensee, error) {
+func (p *Provider) UpdateLicensee(inputLicensee *types.Licensee) (*types.Licensee, error) {
+	licensee := inputLicensee.DeepCopyObject().(*types.Licensee)
 	tx, err := p.db.Begin()
 	if err != nil {
 		return nil, err

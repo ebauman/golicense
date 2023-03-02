@@ -28,7 +28,7 @@ func NewSqliteProvider(dsn string) (storage.GolicenseStore, error) {
 		return nil, err
 	}
 
-	return Provider{db: db}, nil
+	return &Provider{db: db}, nil
 }
 
 func handleRollback(transaction *sql.Tx, err error) error {
