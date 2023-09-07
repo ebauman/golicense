@@ -3,7 +3,6 @@ package sqlite
 import (
 	"database/sql"
 	"errors"
-	"github.com/ebauman/golicense/pkg/storage"
 	_ "modernc.org/sqlite"
 )
 
