@@ -2,9 +2,9 @@ package scheme
 
 import (
 	v1 "github.com/ebauman/golicense/pkg/apis/golicense.1eb100.net/v1"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 )
@@ -22,9 +22,13 @@ var (
 // For instance, we are going to take the types from the v1 package and add them to the Scheme
 // This allows our api server to recognize the types
 func AddToScheme(scheme *runtime.Scheme) error {
-	metav1.AddToGroupVersion(scheme, schema.GroupVersion{Version: "v1"})
+	metav1.AddToGroupVersion(scheme, v1.SchemeGroupVersion)
 
 	if err := v1.AddToScheme(scheme); err != nil {
+		return err
+	}
+
+	if err := corev1.AddToScheme(scheme); err != nil {
 		return err
 	}
 

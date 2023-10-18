@@ -3,6 +3,7 @@ package mysql
 import (
 	"github.com/acorn-io/mink/pkg/db"
 	"github.com/acorn-io/mink/pkg/serializer"
+	"github.com/acorn-io/mink/pkg/strategy"
 	v1 "github.com/ebauman/golicense/pkg/apis/golicense.1eb100.net/v1"
 	golicenseScheme "github.com/ebauman/golicense/pkg/scheme"
 	"k8s.io/apiserver/pkg/registry/rest"
@@ -11,15 +12,49 @@ import (
 
 func APIGroups(dsn string) (*genericapiserver.APIGroupInfo, error) {
 	scheme := golicenseScheme.Scheme
-	dbFactory := db.NewFactory(scheme, dsn)
+	dbFactory, err := db.NewFactory(scheme, dsn)
+	if err != nil {
+		return nil, err
+	}
 
-	authorityStorage, err := NewAuthorityStorage(dbFactory)
+	var authorityStrategy, licenseStrategy, licenseeStrategy, certificateStrategy, productStrategy strategy.CompleteStrategy
+	authorityStrategy, err = dbFactory.NewDBStrategy(&v1.Authority{})
+	licenseStrategy, err = dbFactory.NewDBStrategy(&v1.License{})
+	licenseeStrategy, err = dbFactory.NewDBStrategy(&v1.Licensee{})
+	certificateStrategy, err = dbFactory.NewDBStrategy(&v1.Certificate{})
+	productStrategy, err = dbFactory.NewDBStrategy(&v1.Product{})
+
+	authorityStorage, err := NewAuthorityStorage(authorityStrategy, productStrategy)
+	if err != nil {
+		return nil, err
+	}
+
+	licenseStorage, err := NewLicenseStorage(licenseStrategy)
+	if err != nil {
+		return nil, err
+	}
+
+	licenseeStorage, err := NewLicenseeStorage(licenseeStrategy, authorityStrategy)
+	if err != nil {
+		return nil, err
+	}
+
+	certificateStorage, err := NewCertificateStorage(certificateStrategy)
+	if err != nil {
+		return nil, err
+	}
+
+	productStorage, err := NewProductStorage(productStrategy)
 	if err != nil {
 		return nil, err
 	}
 
 	stores := map[string]rest.Storage{
-		"authorities": authorityStorage,
+		"authorities":  authorityStorage,
+		"licenses":     licenseStorage,
+		"licensees":    licenseeStorage,
+		"certificates": certificateStorage,
+		"products":     productStorage,
 	}
 	err = v1.AddToScheme(scheme)
 	if err != nil {

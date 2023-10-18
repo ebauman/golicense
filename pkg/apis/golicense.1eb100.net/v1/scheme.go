@@ -21,6 +21,8 @@ func AddToScheme(scheme *runtime.Scheme) error {
 func AddToSchemeWithGV(scheme *runtime.Scheme, schemeGroupVersion schema.GroupVersion) error {
 
 	scheme.AddKnownTypes(schemeGroupVersion,
+		&License{},
+		&LicenseList{},
 		&Authority{},
 		&AuthorityList{},
 		&Licensee{},

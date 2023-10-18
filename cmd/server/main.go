@@ -31,7 +31,13 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	return svr.Run(cmd.Context())
+	if err := svr.Run(cmd.Context()); err != nil {
+		return err
+	}
+
+	<-cmd.Context().Done()
+
+	return cmd.Context().Err()
 }
 
 func main() {
